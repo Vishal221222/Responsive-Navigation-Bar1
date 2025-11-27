@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialHub - Social Media App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --color-primary: #21808d;
+            --color-background: #fcfcf9;
+            --color-text: #13423b;
+            --color-border: #5e5240;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--color-background);
+            color: var(--color-text);
+            font-family: "Inter", "Segoe UI", sans-serif;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #1d7480 100%);
+            box-shadow: 0 4px 12px rgba(33, 128, 141, 0.15);
+            padding: 0.8rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff !important;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 500;
+            margin: 0 0.8rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #fff !important;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: #fff;
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .navbar-toggler {
+            border: none;
+            padding: 0.25rem 0.75rem;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+        }
+
+        /* Search Bar */
+        .search-container {
+            flex-grow: 1;
+            margin: 0 2rem;
+        }
+
+        .search-bar {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 0.5rem 1.2rem;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-bar:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            gap: 1.5rem;
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(33, 128, 141, 0.08);
+            height: fit-content;
+            position: sticky;
+            top: 80px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--color-text);
+            text-decoration: none;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(33, 128, 141, 0.1);
+            color: var(--color-primary);
+        }
+
+        .sidebar-item.active {
+            background: rgba(33, 128, 141, 0.2);
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .sidebar-item i {
+            font-size: 1.3rem;
+        }
+
+        /* Feed */
+        .feed {
+            flex-grow: 1;
+            max-width: 600px;
+        }
+
+        /* Post Card */
+        .post-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(33, 128, 141, 0.08);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .post-card:hover {
+            box-shadow: 0 4px 12px rgba(33, 128, 141, 0.12);
+        }
+
+        .post-header {
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid rgba(33, 128, 141, 0.1);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-primary), #1d7480);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .post-header-info {
+            flex-grow: 1;
+        }
+
+        .post-username {
+            font-weight: 600;
+            color: var(--color-text);
+            margin: 0;
+        }
+
+        .post-time {
+            font-size: 0.85rem;
+            color: #999;
+            margin: 0;
+        }
+
+        .post-content {
+            padding: 1.5rem;
+        }
+
+        .post-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            color: var(--color-text);
+        }
+
+        .post-image {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .post-actions {
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            border-top: 1px solid rgba(33, 128, 141, 0.1);
+            justify-content: space-around;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0;
+        }
+
+        .action-btn:hover {
+            color: var(--color-primary);
+            transform: scale(1.1);
+        }
+
+        .action-btn i {
+            font-size: 1.1rem;
+        }
+
+        /* Right Sidebar - Trends */
+        .trends-sidebar {
+            width: 280px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(33, 128, 141, 0.08);
+            height: fit-content;
+            position: sticky;
+            top: 80px;
+        }
+
+        .trends-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-text);
+        }
+
+        .trend-item {
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            background: rgba(33, 128, 141, 0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .trend-item:hover {
+            background: rgba(33, 128, 141, 0.1);
+        }
+
+        .trend-category {
+            font-size: 0.8rem;
+            color: #999;
+            text-transform: uppercase;
+        }
+
+        .trend-name {
+            font-weight: 600;
+            color: var(--color-text);
+            margin: 0.3rem 0;
+        }
+
+        .trend-count {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .trends-sidebar {
+                display: none;
+            }
+            .main-container {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .feed {
+                max-width: 100%;
+            }
+            .search-container {
+                margin: 0 1rem;
+            }
+            .main-container {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar {
+                padding: 0.8rem 1rem;
+            }
+            .navbar-brand {
+                font-size: 1.3rem;
+            }
+            .search-container {
+                margin: 0 0.5rem;
+            }
+            .search-bar {
+                font-size: 0.9rem;
+                padding: 0.4rem 0.8rem;
+            }
+            .post-actions {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid" style="padding: 0 1rem;">
+            <a class="navbar-brand" href="#home">
+                <i class="bi bi-chat-dots-fill"></i> SocialHub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <input type="text" class="search-bar" placeholder="Search SocialHub...">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home"><i class="bi bi-house-fill"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#explore"><i class="bi bi-compass"></i> Explore</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#messages"><i class="bi bi-envelope"></i> Messages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#notifications"><i class="bi bi-bell"></i> Notifications</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#profile"><i class="bi bi-person-circle"></i> Profile</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <h5 style="margin-bottom: 1.5rem; color: var(--color-primary);">Menu</h5>
+            <a class="sidebar-item active" href="#home">
+                <i class="bi bi-house-fill"></i> Home
+            </a>
+            <a class="sidebar-item" href="#explore">
+                <i class="bi bi-compass"></i> Explore
+            </a>
+            <a class="sidebar-item" href="#bookmarks">
+                <i class="bi bi-bookmark"></i> Bookmarks
+            </a>
+            <a class="sidebar-item" href="#messages">
+                <i class="bi bi-chat-left"></i> Messages
+            </a>
+            <a class="sidebar-item" href="#notifications">
+                <i class="bi bi-bell"></i> Notifications
+            </a>
+            <a class="sidebar-item" href="#profile">
+                <i class="bi bi-person"></i> Profile
+            </a>
+        </div>
+
+        <!-- Feed -->
+        <div class="feed">
+            <!-- Create Post -->
+            <div class="post-card" style="margin-bottom: 2rem;">
+                <div style="padding: 1.5rem;">
+                    <div style="display: flex; gap: 1rem;">
+                        <div class="user-avatar" style="width: 50px; height: 50px;">V</div>
+                        <input type="text" class="form-control" placeholder="What's happening?!" style="border-radius: 20px; background: rgba(33, 128, 141, 0.05); border: none;">
+                    </div>
+                    <button class="btn btn-primary" style="margin-top: 1rem; background: var(--color-primary); border: none; border-radius: 20px; float: right;">Post</button>
+                </div>
+            </div>
+
+            <!-- Post 1 -->
+            <div class="post-card">
+                <div class="post-header">
+                    <div class="user-avatar">A</div>
+                    <div class="post-header-info">
+                        <p class="post-username">Arjun Kumar</p>
+                        <p class="post-time">2 hours ago</p>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <p class="post-text">Just finished my first hackathon project! So excited to share it with everyone. #Coding #Hackathon #WebDevelopment</p>
+                </div>
+                <div class="post-actions">
+                    <button class="action-btn">
+                        <i class="bi bi-heart"></i> <span>245</span>
+                    </button>
+                    <button class="action-btn">
+                        <i class="bi bi-chat"></i> <span>32</span>
+                    </button>
+                    <button class="action-btn">
+                        <i class="bi bi-share"></i> <span>18</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Post 2 -->
+            <div class="post-card">
+                <div class="post-header">
+                    <div class="user-avatar" style="background: linear-gradient(135deg, #ff6b6b, #ff5252);">P</div>
+                    <div class="post-header-info">
+                        <p class="post-username">Priya Singh</p>
+                        <p class="post-time">4 hours ago</p>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <p class="post-text">Beautiful sunset today! Nature is amazing. 🌅 Who else loves evening walks?</p>
+                </div>
+                <div class="post-actions">
+                    <button class="action-btn">
+                        <i class="bi bi-heart"></i> <span>512</span>
+                    </button>
+                    <button class="action-btn">
+                        <i class="bi bi-chat"></i> <span>67</span>
+                    </button>
+                    <button class="action-btn">
+                        <i class="bi bi-share"></i> <span>43</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Post 3 -->
+            <div class="post-card">
+                <div class="post-header">
+                    <div class="user-avatar" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">R</div>
+                    <div class="post-header-info">
+                        <p class="post-username">Raj Patel</p>
+                        <p class="post-time">6 hours ago</p>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <p class="post-text">Machine Learning is transforming the world! Just learned about neural networks today. The future is AI! 🤖</p>
+                </div>
+                <div class="post-actions">
+                    <button class="action-btn">
+                        <i class="bi bi-heart"></i> <span>389</span>
+                    </button>
+                    <button class="action-btn">
+                        <i class="bi bi-chat"></i> <span>91</span>
+                    </button>
+                    <button class="action-btn">
+                        <i class="bi bi-share"></i> <span>54</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Post 4 -->
+            <div class="post-card">
+                <div class="post-header">
+                    <div class="user-avatar" style="background: linear-gradient(135deg, #fa709a, #fee140);">M</div>
+                    <div class="post-header-info">
+                        <p class="post-username">Maya Desai</p>
+                        <p class="post-time">8 hours ago</p>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <p class="post-text">Coffee and code - the perfect combination! Currently working on my full-stack project. Anyone else a coffee addict? ☕</p>
+                </div>
+                <div class="post-actions">
+                    <button class="action-btn">
+                        <i class="bi bi-heart"></i> <span>278</span>
+                    </button>
+                    <button class="action-btn">
+                        <i class="bi bi-chat"></i> <span>45</span>
+                    </button>
+                    <button class="action-btn">
+                        <i class="bi bi-share"></i> <span>22</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar - Trends -->
+        <div class="trends-sidebar">
+            <div class="trends-title">What's Trending</div>
+            
+            <div class="trend-item">
+                <div class="trend-category">Trending Worldwide</div>
+                <div class="trend-name">#WebDevelopment</div>
+                <div class="trend-count">145K posts</div>
+            </div>
+
+            <div class="trend-item">
+                <div class="trend-category">Technology</div>
+                <div class="trend-name">#AI</div>
+                <div class="trend-count">892K posts</div>
+            </div>
+
+            <div class="trend-item">
+                <div class="trend-category">Trending Worldwide</div>
+                <div class="trend-name">#Hackathon</div>
+                <div class="trend-count">67K posts</div>
+            </div>
+
+            <div class="trend-item">
+                <div class="trend-category">Entertainment</div>
+                <div class="trend-name">#JavaScript</div>
+                <div class="trend-count">234K posts</div>
+            </div>
+
+            <div class="trend-item">
+                <div class="trend-category">Technology</div>
+                <div class="trend-name">#React</div>
+                <div class="trend-count">512K posts</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add interactivity to action buttons
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.toggle('liked');
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('bi-heart')) {
+                    icon.classList.toggle('bi-heart-fill');
+                }
+            });
+        });
+
+        // Add interactivity to sidebar items
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
